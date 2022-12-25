@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cargo Build Binary
+        run: |
+          cargo build --release
+
+      - name: Optimize Binary with UPX
+        run: |
+          upx --best --lzma target/release/telnum_gen
+
+      - name: Release
+        uses: docker://antonyurchenko/git-release:v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_NAME_PREFIX: "Release "
+          CHANGELOG_FILE: none
+        with:
+          args: |
+            target/release/telnum_gen

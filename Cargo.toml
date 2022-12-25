@@ -1,0 +1,19 @@
+[package]
+name = "nuttertools"
+description = "A collection of professional CLI tools in Rust"
+authors = ["mbrav <mbrav@protonmail.com>"]
+version = "0.0.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+opt-level = 2
+
+# Build optimizations: https://github.com/johnthagen/min-sized-rust
+[profile.release]
+strip = true # Strip symbols from binary
+opt-level = "s" # Optimize for size
+lto = true # Enable link time optimization
+codegen-units = 1 # Maximize size reduction optimizations (takes longer)
+
+[dependencies]
