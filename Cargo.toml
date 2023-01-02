@@ -1,6 +1,6 @@
 [package]
 name = "nuttertools"
-description = "A collection of professional CLI tools in Rust"
+description = "A collection of crazy but professional CLI tools in Rust"
 authors = ["mbrav <mbrav@protonmail.com>"]
 version = "0.0.1"
 edition = "2021"
@@ -17,3 +17,4 @@ lto = true # Enable link time optimization
 codegen-units = 1 # Maximize size reduction optimizations (takes longer)
 
 [dependencies]
+clap = { version = "4", features = ["derive"] }
