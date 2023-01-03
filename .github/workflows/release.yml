@@ -12,13 +12,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Cache Build
+        id: cache-build
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: ${{ runner.os }}-build
+
+      - name: Cargo Test
+        run: |
+          cargo test
+
+      - name: Cargo Clippy
+        run: |
+          cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used
+
       - name: Cargo Build Binary
         run: |
+          cd rust
           cargo build --release
+          chmod +x target/release/${{ github.event.repository.name }}
 
       - name: Optimize Binary with UPX
         run: |
-          upx --best --lzma target/release/telnum_gen
+          upx --best --lzma target/release/${{ github.event.repository.name }}
+
+      - name: Package Binary
+        run: |
+          toolchain=$(rustup toolchain list | awk '{print $1;}')
+          tar_name="${{ github.event.repository.name }}_${{ github.ref_name }}-$toolchain"
+          tar -cvzf target/release/$tar_name.tar.gz target/release/${{ github.event.repository.name }}
 
       - name: Release
         uses: docker://antonyurchenko/git-release:v5
@@ -28,4 +51,4 @@ jobs:
           CHANGELOG_FILE: none
         with:
           args: |
-            target/release/telnum_gen
+            target/release/*.tar.gz

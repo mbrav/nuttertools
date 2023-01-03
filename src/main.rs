@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 
-use nuttertools::echo;
+use nuttertools::{prosecho, rat, Error};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -10,23 +10,19 @@ pub struct Cli {
     pub command: Commands,
 }
 
+/// A collection of crazy CLI tools in Rust
 #[derive(Subcommand)]
 pub enum Commands {
-    /// nuttertools
-    /// A collection of crazy but professional CLI tools in Rust
-    ///
-    /// Echo program
-    Echo(echo::Options),
-    /// Telephone number generator
-    TelNumGen,
+    Prosecho(prosecho::Options),
+    Rat(rat::Options),
 }
 
-fn main() -> Result<(), echo::Error> {
+fn main() -> Result<(), Error> {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Echo(echo_options) => echo::main(echo_options)?,
-        Commands::TelNumGen => println!("Cool"),
+        Commands::Prosecho(prosecho_options) => prosecho::main(prosecho_options)?,
+        Commands::Rat(rat_options) => rat::main(rat_options)?,
     }
     Ok(())
 }

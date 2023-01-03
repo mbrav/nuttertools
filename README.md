@@ -10,6 +10,6 @@
 
 <h1 align="center">nuttertools</h1>
 
-<p align="center">A collection of crazy but professional CLI tools in Rust.
+<p align="center">A collection of crazy CLI tools in Rust.
 <br>Inspired by the "nuttertools" cheat code from <i>Grand Theft Auto: ViceCity</i>.
 </p>
