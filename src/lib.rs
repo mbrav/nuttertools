@@ -1,5 +1,6 @@
 use std::fmt;
 
+pub mod phone_gen;
 pub mod prosecho;
 pub mod rat;
 

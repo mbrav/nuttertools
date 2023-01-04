@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 
-use nuttertools::{prosecho, rat, Error};
+use nuttertools::{phone_gen, prosecho, rat, Error};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -13,6 +13,7 @@ pub struct Cli {
 /// A collection of crazy CLI tools in Rust
 #[derive(Subcommand)]
 pub enum Commands {
+    PhoneGen(phone_gen::Options),
     Prosecho(prosecho::Options),
     Rat(rat::Options),
 }
@@ -21,8 +22,9 @@ fn main() -> Result<(), Error> {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Prosecho(prosecho_options) => prosecho::main(prosecho_options)?,
-        Commands::Rat(rat_options) => rat::main(rat_options)?,
+        Commands::PhoneGen(options) => phone_gen::main(options)?,
+        Commands::Prosecho(options) => prosecho::main(options)?,
+        Commands::Rat(options) => rat::main(options)?,
     }
     Ok(())
 }
