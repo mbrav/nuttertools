@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 
 use nuttertools::{phone_gen, prosecho, rat, Error};
+use std::time::{Duration, Instant};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -21,10 +22,16 @@ pub enum Commands {
 fn main() -> Result<(), Error> {
     let cli = Cli::parse();
 
+    let start: Instant = Instant::now();
+
     match &cli.command {
         Commands::PhoneGen(options) => phone_gen::main(options)?,
         Commands::Prosecho(options) => prosecho::main(options)?,
         Commands::Rat(options) => rat::main(options)?,
     }
+
+    let end: Duration = start.elapsed();
+    println!("Elapsed: {end:.3?}");
+
     Ok(())
 }

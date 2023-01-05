@@ -2,7 +2,6 @@ use clap::{arg, Args};
 use std::fs::File;
 use std::io::Write;
 use std::mem::size_of_val;
-use std::time::{Duration, Instant};
 
 use crate::Error;
 
@@ -16,11 +15,7 @@ pub fn main(opts: &Options) -> Result<(), Error> {
     println!("Output to: {}", opts.file);
 
     let gen = Options::new(&opts.country_code, &opts.prefix, &opts.file);
-
-    let start: Instant = Instant::now();
     gen.generate();
-    let end: Duration = start.elapsed();
-    println!("Elapsed: {end:.3?}");
     Ok(())
 }
 
