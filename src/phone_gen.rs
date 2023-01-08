@@ -30,7 +30,7 @@ pub struct Options {
     /// Specify string prefix.
     /// For example, if prefix `800` is specified with country code '1'
     /// Then only numbers in `1800XXXXXXX` will be generated
-    #[arg(short = 'p', long = "p")]
+    #[arg(short = 'p', long = "prefix")]
     pub prefix: String,
     /// Output file name with valid path
     #[arg(short = 'f', long = "file")]
@@ -46,10 +46,10 @@ impl Options {
     pub fn new(country_code: &String, prefix: &String, file: &String) -> Self {
         let combinations = Some(10 - prefix.to_string().len());
         Self {
-            country_code: country_code.to_string(),
-            prefix: format!("{country_code}{prefix}"),
-            combinations,
-            file: file.to_string(),
+            country_code: country_code.into(),
+            prefix: format!("{country_code}{prefix}").into(),
+            combinations: combinations.into(),
+            file: file.into(),
         }
     }
 
