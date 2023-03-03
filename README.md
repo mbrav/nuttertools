@@ -13,3 +13,43 @@
 <p align="center">A collection of crazy CLI tools in Rust.
 <br>Inspired by the "nuttertools" cheat code from <i>Grand Theft Auto: ViceCity</i>.
 </p>
+
+
+## Install 
+
+```bash
+cargo install 
+```
+
+## Run
+
+First, build release binary
+
+```bash
+cargo build --release 
+```
+
+The run the binary
+
+```bash
+./target/release/nuttertools --help
+```
+
+You will get the following output:
+
+```text
+A collection of crazy CLI tools in Rust
+
+Usage: nuttertools <COMMAND>
+
+Commands:
+  phone-gen         Brute force all possible phone numbers
+  prosecho          The drunk pro's alternative to echo
+  rat               A program that will rat on all files you pass to it
+  russian-roulette  Famous Russian gun game that blows brains
+  help              Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+```

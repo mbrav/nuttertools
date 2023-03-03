@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 
-use nuttertools::{phone_gen, prosecho, rat, Error};
+use nuttertools::{phone_gen, prosecho, rat, russian_roulette, Error};
 use std::time::{Duration, Instant};
 
 #[derive(Parser)]
@@ -17,6 +17,7 @@ pub enum Commands {
     PhoneGen(phone_gen::Options),
     Prosecho(prosecho::Options),
     Rat(rat::Options),
+    RussianRoulette(russian_roulette::Options),
 }
 
 fn main() -> Result<(), Error> {
@@ -28,6 +29,7 @@ fn main() -> Result<(), Error> {
         Commands::PhoneGen(options) => phone_gen::main(options)?,
         Commands::Prosecho(options) => prosecho::main(options)?,
         Commands::Rat(options) => rat::main(options)?,
+        Commands::RussianRoulette(options) => russian_roulette::main(options)?,
     }
 
     let end: Duration = start.elapsed();

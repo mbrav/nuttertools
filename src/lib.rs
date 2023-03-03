@@ -2,6 +2,7 @@ use std::fmt;
 
 pub mod phone_gen;
 pub mod prosecho;
+pub mod russian_roulette;
 pub mod rat;
 
 /// nuttertools Error
