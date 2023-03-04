@@ -2,9 +2,9 @@ use std::fmt;
 
 pub mod phone_gen;
 pub mod prosecho;
+pub mod proxy_police;
 pub mod rat;
 pub mod russian_roulette;
-pub mod socket_police;
 
 /// nuttertools Error
 #[derive(Debug)]

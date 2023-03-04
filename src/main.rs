@@ -1,6 +1,6 @@
 use clap::{ArgAction, Parser, Subcommand};
 
-use nuttertools::{phone_gen, prosecho, rat, russian_roulette, socket_police, Error};
+use nuttertools::{phone_gen, prosecho, proxy_police, rat, russian_roulette, Error};
 use std::time::{Duration, Instant};
 
 #[derive(Parser)]
@@ -19,9 +19,9 @@ pub struct Cli {
 pub enum Commands {
     PhoneGen(phone_gen::Options),
     Prosecho(prosecho::Options),
+    ProxyPolice(proxy_police::Options),
     Rat(rat::Options),
     RussianRoulette(russian_roulette::Options),
-    SocketPolice(socket_police::Options),
 }
 
 fn main() -> Result<(), Error> {
@@ -32,9 +32,9 @@ fn main() -> Result<(), Error> {
     match &cli.command {
         Commands::PhoneGen(options) => phone_gen::main(options)?,
         Commands::Prosecho(options) => prosecho::main(options)?,
+        Commands::ProxyPolice(options) => proxy_police::main(options)?,
         Commands::Rat(options) => rat::main(options)?,
         Commands::RussianRoulette(options) => russian_roulette::main(options)?,
-        Commands::SocketPolice(options) => socket_police::main(options)?,
     }
 
     if !&cli.no_time {
