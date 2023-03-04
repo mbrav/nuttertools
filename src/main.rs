@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand};
+use clap::{ArgAction, Parser, Subcommand};
 
 use nuttertools::{phone_gen, prosecho, rat, russian_roulette, Error};
 use std::time::{Duration, Instant};
@@ -9,6 +9,9 @@ use std::time::{Duration, Instant};
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
+    /// Specify whether to print elapsed time of the program
+    #[arg(short, long, action=ArgAction::SetTrue)]
+    no_time: bool,
 }
 
 /// A collection of crazy CLI tools in Rust
@@ -32,8 +35,10 @@ fn main() -> Result<(), Error> {
         Commands::RussianRoulette(options) => russian_roulette::main(options)?,
     }
 
-    let end: Duration = start.elapsed();
-    println!("Elapsed: {end:.3?}");
+    if !&cli.no_time {
+        let end: Duration = start.elapsed();
+        println!("Elapsed: {end:.3?}");
+    }
 
     Ok(())
 }
