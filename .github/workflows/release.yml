@@ -21,15 +21,14 @@ jobs:
 
       - name: Cargo Test
         run: |
-          cargo test
+          cargo test --release
 
       - name: Cargo Clippy
         run: |
-          cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used
+          cargo clippy --release -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used
 
       - name: Cargo Build Binary
         run: |
-          cd rust
           cargo build --release
           chmod +x target/release/${{ github.event.repository.name }}
 

@@ -47,8 +47,8 @@ impl Options {
         let combinations = Some(10 - prefix.to_string().len());
         Self {
             country_code: country_code.into(),
-            prefix: format!("{country_code}{prefix}").into(),
-            combinations: combinations.into(),
+            prefix: format!("{country_code}{prefix}"),
+            combinations,
             file: file.into(),
         }
     }

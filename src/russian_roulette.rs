@@ -38,7 +38,7 @@ impl Gun {
             _ => println!("Barrel with size {} opened", &barrel_size),
         }
         let mut barrel = vec![false; barrel_size as usize];
-        let mut hammer_pos: usize = 0;
+        let mut hammer_pos: u8 = 0;
         match bullets {
             0 => panic!("0 Bullets!"),
             _ => {
@@ -47,19 +47,16 @@ impl Gun {
                 } else {
                     println!("Barrel loading with {} bullets", &bullets);
                     while bullets > 0 {
-                        hammer_pos = (c_rand_u8() % barrel_size) as usize;
-                        if barrel[hammer_pos] == false {
-                            barrel[hammer_pos] = true;
+                        hammer_pos = c_rand_u8() % barrel_size;
+                        if !barrel[hammer_pos as usize] {
+                            barrel[hammer_pos as usize] = true;
                             bullets -= 1;
                         }
                     }
                 }
             }
         }
-        Self {
-            barrel: barrel,
-            hammer_pos: hammer_pos as u8,
-        }
+        Self { barrel, hammer_pos }
     }
 
     // Trigger gun an fire round if loaded in barrel
@@ -68,9 +65,9 @@ impl Gun {
         let real_pos = self.hammer_pos as usize % self.barrel.len();
         if self.barrel[real_pos] {
             self.barrel[real_pos] = false;
-            println!("BAAANNG!!")
+            println!("BAAANNG!!");
         } else {
-            println!("*Click*, {} empty", real_pos)
+            println!("*Click*, {real_pos} empty");
         }
     }
 }
