@@ -1,4 +1,4 @@
-use std::io;
+use std::io::{BufReader, Read, Write};
 use std::net::{Ipv4Addr, TcpListener, TcpStream};
 use std::sync::Arc;
 use std::thread;
@@ -59,9 +59,6 @@ pub fn main(opts: &Options) -> Result<(), Error> {
 }
 
 fn handle_connection(stream_one: TcpStream, stream_two: TcpStream) {
-    print!("Stream one data {:?}", &stream_one);
-    print!("Stream two data {:?}", &stream_two);
-
     let arc_one = Arc::new(stream_one);
     let arc_two = Arc::new(stream_two);
 
@@ -71,11 +68,32 @@ fn handle_connection(stream_one: TcpStream, stream_two: TcpStream) {
     let mut two_rx = arc_two.try_clone().unwrap();
 
     let connections = vec![
-        thread::spawn(move || io::copy(&mut one_tx, &mut two_rx).unwrap()),
-        thread::spawn(move || io::copy(&mut two_tx, &mut one_rx).unwrap()),
+        thread::spawn(move || reader_writer(&mut one_tx, &mut two_rx)),
+        thread::spawn(move || reader_writer(&mut two_tx, &mut one_rx)),
     ];
 
     for connection in connections {
         connection.join().unwrap();
     }
+}
+
+fn reader_writer(reader: &mut TcpStream, writer: &mut TcpStream) -> u64 {
+    let mut buffer = vec![0u8; 1024];
+
+    let r = BufReader::new(reader);
+    let w = BufReader::new(writer);
+
+    match r.into_inner().read_to_end(&mut buffer) {
+        Ok(received) => {
+            let res = String::from_utf8(buffer.to_owned()).unwrap();
+            println!("Received {} bytes", received);
+            println!("Content: {:?}", res);
+        }
+        Err(_) => println!("Error reading buffer"),
+    }
+
+    w.into_inner().write(&buffer).expect("Error buffer to writer");
+    let len = buffer.len() as u64;
+    buffer.clear();
+    len
 }

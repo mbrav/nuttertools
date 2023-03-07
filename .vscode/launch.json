@@ -7,9 +7,7 @@
             "name": "LLDB Rust Build & Run",
             "program": "${workspaceFolder}/target/debug/${workspaceFolderBasename}",
             "args": [
-                "echo",
-                "Hello World",
-                "-n",
+                "proxy-police"
             ],
             "preLaunchTask": "rust: cargo build"
         }
