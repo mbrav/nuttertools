@@ -80,20 +80,21 @@ fn handle_connection(stream_one: TcpStream, stream_two: TcpStream) {
 fn reader_writer(reader: &mut TcpStream, writer: &mut TcpStream) -> u64 {
     let mut buffer = vec![0u8; 1024];
 
-    let r = BufReader::new(reader);
-    let w = BufReader::new(writer);
+    let mut r = BufReader::new(reader);
 
-    match r.into_inner().read_to_end(&mut buffer) {
+    match r.read(&mut buffer) {
         Ok(received) => {
-            let res = String::from_utf8(buffer.to_owned()).unwrap();
+            let res = String::from_utf8(buffer[..received].to_owned()).unwrap();
             println!("Received {} bytes", received);
             println!("Content: {:?}", res);
+            writer
+                .write_all(&buffer[..received])
+                .expect("Error writing to writer");
+            received as u64
         }
-        Err(_) => println!("Error reading buffer"),
+        Err(_) => {
+            println!("Error reading buffer");
+            0
+        }
     }
-
-    w.into_inner().write(&buffer).expect("Error buffer to writer");
-    let len = buffer.len() as u64;
-    buffer.clear();
-    len
 }
