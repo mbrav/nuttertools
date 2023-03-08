@@ -7,6 +7,8 @@ use crate::Error;
 
 use clap::{arg, Args};
 
+const BUFFER_SIZE: usize = 1024;
+
 /// Proxy tool for spoofing red light activity
 #[derive(Args)]
 pub struct Options {
@@ -77,24 +79,29 @@ fn handle_connection(stream_one: TcpStream, stream_two: TcpStream) {
     }
 }
 
-fn reader_writer(reader: &mut TcpStream, writer: &mut TcpStream) -> u64 {
-    let mut buffer = vec![0u8; 1024];
-
+fn reader_writer(reader: &mut TcpStream, writer: &mut TcpStream) {
     let mut r = BufReader::new(reader);
 
-    match r.read(&mut buffer) {
-        Ok(received) => {
-            let res = String::from_utf8(buffer[..received].to_owned()).unwrap();
-            println!("Received {} bytes", received);
-            println!("Content: {:?}", res);
-            writer
-                .write_all(&buffer[..received])
-                .expect("Error writing to writer");
-            received as u64
-        }
-        Err(_) => {
-            println!("Error reading buffer");
-            0
+    let mut received: Vec<u8> = vec![];
+    // Array with a fixed size
+    let mut buffer = [0u8; BUFFER_SIZE];
+
+    loop {
+        let bytes_read = r.read(&mut buffer).expect("Error getting buffer size");
+        received.extend_from_slice(&buffer[..bytes_read]);
+
+        println!("Received {} bytes", bytes_read);
+        // println!(
+        //     "Content: {:?}",
+        //     String::from_utf8(received.to_owned()).unwrap()
+        // );
+
+        if bytes_read < BUFFER_SIZE {
+            break;
         }
     }
+
+    writer
+        .write_all(&received)
+        .expect("Error writing to writer");
 }
