@@ -2,7 +2,7 @@
 name = "nuttertools"
 description = "A collection of crazy CLI tools in Rust"
 authors = ["mbrav <mbrav@protonmail.com>"]
-version = "0.0.2"
+version = "0.0.3"
 edition = "2021"
 
 [profile.dev]

@@ -181,7 +181,7 @@ checksum = "d59d8c75012853d2e872fb56bc8a2e53718e2cafe1a4c823143141c6d90c322f"
 
 [[package]]
 name = "nuttertools"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "clap",
 ]
