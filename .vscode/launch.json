@@ -9,7 +9,20 @@
             "args": [
                 "proxy-police"
             ],
+            "env": {},
             "preLaunchTask": "rust: cargo build"
-        }
+        },
+        {
+            "name": "Rust: Launch Release",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/git_raider/target/release/git-raider",
+            "args": [
+                "proxy-police"
+            ],
+            "env": {},
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "rust: cargo build release"
+        },
     ]
 }
