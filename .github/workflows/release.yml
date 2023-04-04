@@ -16,16 +16,21 @@ jobs:
         id: cache-build
         uses: actions/cache@v3
         with:
-          path: target
-          key: ${{ runner.os }}-build
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Cargo Test
         run: |
-          cargo test --release
+          cargo test
 
       - name: Cargo Clippy
         run: |
-          cargo clippy --release -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used
+          cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used
 
       - name: Cargo Build Binary
         run: |
@@ -46,8 +51,7 @@ jobs:
         uses: docker://antonyurchenko/git-release:v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_NAME_PREFIX: "Release "
-          CHANGELOG_FILE: none
+          CHANGELOG_FILE: CHANGELOG.md
         with:
           args: |
             target/release/*.tar.gz

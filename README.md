@@ -5,7 +5,7 @@
 
 <p align="center">
     <a href="https://github.com/mbrav/nuttertools" target="_blank" rel="noopener noreferrer">
-        <img width="400" src="logo.png" title="formula-studio">
+        <img width="400" src="logo.png" title="nuttertools">
     </a>
 </p>
 
@@ -14,14 +14,6 @@
 <p align="center">A collection of crazy CLI tools in Rust.
 <br>Inspired by the "nuttertools" cheat code from <i>Grand Theft Auto: ViceCity</i>.
 </p>
-
-
-
-## Install 
-
-```bash
-cargo install 
-```
 
 ## Run
 
@@ -42,16 +34,18 @@ You will get the following output:
 ```text
 A collection of crazy CLI tools in Rust
 
-Usage: nuttertools <COMMAND>
+Usage: nuttertools [OPTIONS] <COMMAND>
 
 Commands:
   phone-gen         Brute force all possible phone numbers
   prosecho          The drunk pro's alternative to echo
+  proxy-police      Proxy tool for spoofing red light activity
   rat               A program that will rat on all files you pass to it
   russian-roulette  Famous Russian gun game that blows brains
   help              Print this message or the help of the given subcommand(s)
 
 Options:
+  -n, --no-time  Specify whether to print elapsed time of the program
   -h, --help     Print help
   -V, --version  Print version
 ```

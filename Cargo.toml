@@ -5,9 +5,8 @@ authors = ["mbrav <mbrav@protonmail.com>"]
 version = "0.0.2"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [profile.dev]
-opt-level = 2
+opt-level = 1
 
 # Build optimizations: https://github.com/johnthagen/min-sized-rust
 [profile.release]
@@ -16,6 +15,10 @@ strip = true # Strip symbols from binary
 opt-level = "z" # Optimize for size
 lto = true # Enable link time optimization
 codegen-units = 1 # Maximize size reduction optimizations (takes longer)
+
+[[bin]]
+name = "nuttertools"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
