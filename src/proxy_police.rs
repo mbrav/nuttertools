@@ -52,7 +52,7 @@ pub fn main(opts: &Options) -> Result<(), Error> {
                 println!("Successfully established a connection with client");
             }
             Err(err) => {
-                println!("Unable to establish a connection with client {}", err);
+                println!("Unable to establish a connection with client {err}");
             }
         }
     }
@@ -64,10 +64,10 @@ fn handle_connection(stream_one: TcpStream, stream_two: TcpStream) {
     let arc_one = Arc::new(stream_one);
     let arc_two = Arc::new(stream_two);
 
-    let mut one_tx = arc_one.try_clone().unwrap();
-    let mut one_rx = arc_one.try_clone().unwrap();
-    let mut two_tx = arc_two.try_clone().unwrap();
-    let mut two_rx = arc_two.try_clone().unwrap();
+    let mut one_tx = arc_one.try_clone().expect("Error unwrapping stream 1 tx");
+    let mut one_rx = arc_one.try_clone().expect("Error unwrapping stream 1 rx");
+    let mut two_tx = arc_two.try_clone().expect("Error unwrapping stream 2 tx");
+    let mut two_rx = arc_two.try_clone().expect("Error unwrapping stream 2 rx");
 
     let connections = vec![
         thread::spawn(move || reader_writer(&mut one_tx, &mut two_rx)),
@@ -75,7 +75,7 @@ fn handle_connection(stream_one: TcpStream, stream_two: TcpStream) {
     ];
 
     for connection in connections {
-        connection.join().unwrap();
+        connection.join().expect("Error unwrapping connection");
     }
 }
 
@@ -90,7 +90,7 @@ fn reader_writer(reader: &mut TcpStream, writer: &mut TcpStream) {
         let bytes_read = r.read(&mut buffer).expect("Error getting buffer size");
         received.extend_from_slice(&buffer[..bytes_read]);
 
-        println!("Received {} bytes", bytes_read);
+        println!("Received {bytes_read} bytes");
         // println!(
         //     "Content: {:?}",
         //     String::from_utf8(received.to_owned()).unwrap()
