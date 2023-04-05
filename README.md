@@ -42,6 +42,7 @@ Commands:
   proxy-police      Proxy tool for spoofing red light activity
   rat               A program that will rat on all files you pass to it
   russian-roulette  Famous Russian gun game that blows brains
+  sha1-crack        Your trusted SHA1 cracking dealer on the block
   help              Print this message or the help of the given subcommand(s)
 
 Options:

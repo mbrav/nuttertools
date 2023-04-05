@@ -9,7 +9,7 @@ use crate::Error;
 #[derive(Args)]
 pub struct Options {
     /// Specify files to concat
-    #[arg(required=true, value_name="FILE", action=ArgAction::Append)]
+    #[arg(required=true, value_name="FILES", action=ArgAction::Append)]
     files: Vec<String>,
     /// Specify whether to print line numbers
     #[arg(short = 'l', long = "lines", action=ArgAction::SetTrue)]

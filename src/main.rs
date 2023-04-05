@@ -1,6 +1,7 @@
 use clap::{ArgAction, Parser, Subcommand};
 
-use nuttertools::{phone_gen, prosecho, proxy_police, rat, russian_roulette, Error};
+use nuttertools::{phone_gen, prosecho, proxy_police, rat, russian_roulette, sha1_crack};
+use std::error::Error;
 use std::time::{Duration, Instant};
 
 #[derive(Parser)]
@@ -22,9 +23,10 @@ pub enum Commands {
     ProxyPolice(proxy_police::Options),
     Rat(rat::Options),
     RussianRoulette(russian_roulette::Options),
+    SHA1Crack(sha1_crack::Options),
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
 
     let start: Instant = Instant::now();
@@ -35,6 +37,7 @@ fn main() -> Result<(), Error> {
         Commands::ProxyPolice(options) => proxy_police::main(options)?,
         Commands::Rat(options) => rat::main(options)?,
         Commands::RussianRoulette(options) => russian_roulette::main(options)?,
+        Commands::SHA1Crack(options) => sha1_crack::main(options)?,
     }
 
     if !&cli.no_time {
