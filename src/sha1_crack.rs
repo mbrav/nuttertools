@@ -23,7 +23,7 @@ pub struct Options {
 
 /// # Errors
 ///
-/// Will return `Err` is SHA1 hash is not valid
+/// Will return `Err` if SHA1 hash is not valid
 pub fn main(opts: &Options) -> Result<(), Box<dyn Error>> {
     if opts.hash.len() != SHA1_HEX_STRING_LENGTH {
         return Err("SHA1 hash is not valid".into());

@@ -1,6 +1,8 @@
 use clap::{ArgAction, Parser, Subcommand};
 
-use nuttertools::{phone_gen, prosecho, proxy_police, rat, russian_roulette, sha1_crack};
+use nuttertools::{
+    blackjacked, phone_gen, prosecho, proxy_police, rat, russian_roulette, sha1_crack,
+};
 use std::error::Error;
 use std::time::{Duration, Instant};
 
@@ -18,6 +20,7 @@ pub struct Cli {
 /// A collection of crazy CLI tools in Rust
 #[derive(Subcommand)]
 pub enum Commands {
+    BlackJacked(blackjacked::main::Options),
     PhoneGen(phone_gen::Options),
     Prosecho(prosecho::Options),
     ProxyPolice(proxy_police::Options),
@@ -32,6 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let start: Instant = Instant::now();
 
     match &cli.command {
+        Commands::BlackJacked(options) => blackjacked::main::main(options)?,
         Commands::PhoneGen(options) => phone_gen::main(options)?,
         Commands::Prosecho(options) => prosecho::main(options)?,
         Commands::ProxyPolice(options) => proxy_police::main(options)?,

@@ -1,5 +1,6 @@
 use std::fmt;
 
+pub mod blackjacked;
 pub mod phone_gen;
 pub mod prosecho;
 pub mod proxy_police;

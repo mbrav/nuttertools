@@ -1,9 +1,31 @@
 use clap::{arg, Args};
+use std::collections::VecDeque;
 use std::fs::File;
-use std::io::Write;
+use std::io::{self, BufWriter, Write};
 use std::mem::size_of_val;
 
 use crate::Error;
+
+/// Brute force all possible phone numbers
+#[derive(Args)]
+pub struct Options {
+    /// Specify string country code.
+    /// For example, if country code '1' is specified
+    /// Then all numbers will be generated starting with '1'
+    #[arg(short = 'c', long = "country_code", default_value = "1")]
+    pub country_code: String,
+    /// Specify string prefix.
+    /// For example, if prefix `800` is specified with country code '1'
+    /// Then only numbers in `1800XXXXXXX` will be generated
+    #[arg(short = 'p', long = "prefix", default_value = "800")]
+    pub prefix: String,
+    /// Output file name with valid path
+    #[arg(short = 'f', long = "file", default_value = "phone_gen.txt")]
+    pub file: String,
+    /// Number of cartesian combinations
+    /// This is the total count of `X` digits that need to be generated
+    pub combinations: Option<usize>,
+}
 
 /// # Errors
 ///
@@ -19,28 +41,7 @@ pub fn main(opts: &Options) -> Result<(), Error> {
     Ok(())
 }
 
-/// Brute force all possible phone numbers
-#[derive(Args)]
-pub struct Options {
-    /// Specify string country code.
-    /// For example, if country code '1' is specified
-    /// Then all numbers will be generated starting with '1'
-    #[arg(short = 'c', long = "country_code")]
-    pub country_code: String,
-    /// Specify string prefix.
-    /// For example, if prefix `800` is specified with country code '1'
-    /// Then only numbers in `1800XXXXXXX` will be generated
-    #[arg(short = 'p', long = "prefix")]
-    pub prefix: String,
-    /// Output file name with valid path
-    #[arg(short = 'f', long = "file")]
-    pub file: String,
-    /// Number of cartesian combinations
-    /// This is the total count of `X` digits that need to be generated
-    pub combinations: Option<usize>,
-}
-
-///  General Phone number generation struct
+/// General Phone number generation struct
 impl Options {
     #[must_use]
     pub fn new(country_code: &String, prefix: &String, file: &String) -> Self {
@@ -65,34 +66,26 @@ impl Options {
 
     fn cartesian_product(&self, numbers: &[i32], file: &File) {
         let buffer_size = 100_000;
-        let mut buffer: Vec<String> = Vec::new();
+
+        let mut buffer: VecDeque<String> = VecDeque::with_capacity(buffer_size);
+
+        // Preallocate the buffer vector
+        buffer.reserve(buffer_size);
 
         // Create a matrix of all numbers times number of combinations
-        let mut v: Vec<Vec<i32>> = Vec::new();
-        for _ in 1..=self.combinations.expect("Error unwrapping combinations") {
-            v.push(numbers.to_vec());
-        }
+        let mut v: Vec<Vec<i32>> = vec![numbers.to_vec(); self.combinations.unwrap()];
 
         let mut indices = vec![0; v.len()];
         let mut done = false;
 
         while !done {
-            let mut row = Vec::new();
-            for (i, arr) in v.iter().enumerate() {
-                row.push(arr[indices[i]]);
-            }
+            let r = self.prefix.clone() + &v.iter().map(|&i| i.to_string()).collect::<String>();
 
-            let r = format!(
-                "{}{}",
-                &self.prefix,
-                row.into_iter().map(|i| i.to_string()).collect::<String>()
-            );
-
-            buffer.push(r);
+            buffer.push_back(r);
 
             if buffer.len() == buffer_size {
                 write_string_array(&buffer, file);
-                buffer = Vec::new();
+                buffer.clear();
             }
 
             for i in (0..v.len()).rev() {
@@ -116,9 +109,15 @@ fn open_file(path: &String) -> File {
     File::create(path).expect("Unable to create file")
 }
 
-fn write_string_array(array: &[String], mut file: &File) {
+fn write_string_array(array: &VecDeque<String>, mut file: &File) {
+    // Create a buffered writer for improved I/O performance
+    let mut writer = BufWriter::new(file);
+
+    // Join the strings and write to the file
     let buffer = array.join("\n");
-    println!("Buffer size {}KB", size_of_val(&*buffer) / 1024);
-    file.write_all(buffer.as_bytes())
-        .expect("Unable to write file");
+    println!("Buffer size: {} KB", size_of_val(&*buffer) / 1024);
+
+    writer
+        .write_all(buffer.as_bytes())
+        .expect("Unable to write to file");
 }
