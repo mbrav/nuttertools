@@ -32,13 +32,14 @@ pub enum Outcome {
 /// TODO: Move game logic to main.rs
 impl Game {
     /// Create new Game
-    pub fn new(decks: u8) -> Game {
+    #[must_use] 
+    pub fn new(decks: u8) -> Self {
         let deck = Deck::new(decks);
         deck.cards.iter().for_each(|c| {
-            print!("{} ", c);
+            print!("{c} ");
         });
         println!(" ");
-        Game {
+        Self {
             deck,
             player_hand: Hand::new(),
             dealer_done: false,
@@ -59,11 +60,18 @@ pub struct Hand {
     pub cards: VecDeque<Card>,
 }
 
+impl Default for Hand {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Hand implementation
 impl Hand {
     /// Create new Game
-    pub fn new() -> Hand {
-        Hand {
+    #[must_use] 
+    pub const fn new() -> Self {
+        Self {
             cards: VecDeque::new(),
         }
     }
@@ -74,6 +82,7 @@ impl Hand {
     }
 
     /// Get the sum of values in hand
+    #[must_use] 
     pub fn value(&self) -> u8 {
         // Count number of aces in hand
         let mut aces = self
@@ -84,7 +93,7 @@ impl Hand {
             .count();
 
         // Get sum of all cards
-        let mut val = self.cards.iter().map(|v| v.val()).sum();
+        let mut val = self.cards.iter().map(super::cards::Card::val).sum();
 
         // If convert aces from 11 to 1 if value is over 21
         while val > 21 && aces > 0 {

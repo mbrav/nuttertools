@@ -22,6 +22,10 @@ pub struct Options {
 /// # Errors
 ///
 /// Will return `Err` if any error is encountered
+///
+/// # Panics
+///
+/// Panics if a line cannot be read from an opened file.
 pub fn main(
     Options {
         files,

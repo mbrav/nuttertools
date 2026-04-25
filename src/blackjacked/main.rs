@@ -6,7 +6,7 @@ use crate::blackjacked::cards::{Card, Deck};
 use crate::blackjacked::error::BJError;
 use crate::blackjacked::game::{Action, Game, Outcome};
 
-/// A thug's pocket BlackJack program
+/// A thug's pocket `BlackJack` program
 #[derive(Args)]
 pub struct Options {
     /// Specify number of decks
@@ -14,11 +14,18 @@ pub struct Options {
     decks: u8,
 }
 
+/// # Errors
+///
+/// Returns an error if the underlying game I/O fails.
+///
+/// # Panics
+///
+/// Panics if the initial hand draw fails.
 pub fn main(opts: &Options) -> Result<(), Box<dyn Error>> {
     let mut game = Game::new(opts.decks);
-    draw_hands(&mut game).unwrap();
+    draw_hands(&mut game).expect("failed to draw initial hands");
     loop {
-        let play = play_cards(&mut game);
+        let play = play_cards(&game);
 
         match play {
             Outcome::DealerBust => {
@@ -84,7 +91,7 @@ pub fn main(opts: &Options) -> Result<(), Box<dyn Error>> {
                 Action::Stand => {}
             },
             Err(e) => {
-                eprintln!("Error: {}", e);
+                eprintln!("Error: {e}");
                 // Restart loop and ask for input again
                 continue;
             }
@@ -107,7 +114,7 @@ pub fn main(opts: &Options) -> Result<(), Box<dyn Error>> {
 }
 
 /// Display Cards and Check for busts and blackjacks
-fn play_cards(game: &mut Game) -> Outcome {
+fn play_cards(game: &Game) -> Outcome {
     // Print Dealer and Player hand status
     print!("Dealer Hand {}: ", game.dealer_hand.value());
     println!(

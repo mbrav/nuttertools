@@ -16,7 +16,7 @@ pub struct Options {
     pub hash: String,
 
     /// File Path.
-    /// Example: https://github.com/danielmiessler/SecLists/raw/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt
+    /// Example: <https://github.com/danielmiessler/SecLists/raw/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt>
     #[arg(short = 'f', long = "file")]
     pub file: String,
 }
@@ -37,7 +37,11 @@ pub fn main(opts: &Options) -> Result<(), Box<dyn Error>> {
         let password = line.trim();
 
         let digest = Sha1::digest(password.as_bytes());
-        let hash_str: String = digest.iter().map(|b| format!("{:02x}", b)).collect();
+        let hash_str = digest.iter().fold(String::with_capacity(40), |mut s, b| {
+            use std::fmt::Write;
+            let _ = write!(s, "{b:02x}");
+            s
+        });
         if opts.hash == hash_str {
             println!("Password found: {password}");
             println!("Line Number: {}", l + 1);

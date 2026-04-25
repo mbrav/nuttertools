@@ -29,6 +29,10 @@ pub struct Options {
 /// # Errors
 ///
 /// Will return `Err` string is empty
+///
+/// # Panics
+///
+/// Panics if the TCP listener cannot bind to the specified address.
 pub fn main(opts: &Options) -> Result<(), Error> {
     let listener = TcpListener::bind(format!("{}:{}", &opts.host, &opts.port))
         .expect("Error when opening socket");

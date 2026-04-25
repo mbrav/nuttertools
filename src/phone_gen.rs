@@ -45,7 +45,7 @@ pub fn main(opts: &Options) -> Result<(), Error> {
 impl Options {
     #[must_use]
     pub fn new(country_code: &String, prefix: &String, file: &String) -> Self {
-        let combinations = Some(10 - prefix.to_string().len());
+        let combinations = Some(10 - prefix.clone().len());
         Self {
             country_code: country_code.into(),
             prefix: format!("{country_code}{prefix}"),
@@ -73,7 +73,7 @@ impl Options {
         buffer.reserve(buffer_size);
 
         // Create a matrix of all numbers times number of combinations
-        let v: Vec<Vec<i32>> = vec![numbers.to_vec(); self.combinations.unwrap()];
+        let v: Vec<Vec<i32>> = vec![numbers.to_vec(); self.combinations.expect("combinations not set")];
 
         let mut indices = vec![0; v.len()];
         let mut done = false;

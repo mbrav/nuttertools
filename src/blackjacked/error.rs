@@ -11,9 +11,9 @@ pub enum BJError {
 impl fmt::Display for BJError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            BJError::DeckEmpty => write!(f, "Deck is empty"),
-            BJError::ActionUnknown => write!(f, "Action is not known"),
-            BJError::UserInput => write!(f, "Failed to get user input"),
+            Self::DeckEmpty => write!(f, "Deck is empty"),
+            Self::ActionUnknown => write!(f, "Action is not known"),
+            Self::UserInput => write!(f, "Failed to get user input"),
         }
     }
 }

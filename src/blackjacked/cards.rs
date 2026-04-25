@@ -12,8 +12,9 @@ pub struct Deck {
 /// Deck implementation
 impl Deck {
     /// Create new Deck
-    pub fn new(decks: u8) -> Deck {
-        let mut house_deck = Deck {
+    #[must_use] 
+    pub fn new(decks: u8) -> Self {
+        let mut house_deck = Self {
             decks,
             cards: generate_cards(decks),
         };
@@ -28,10 +29,14 @@ impl Deck {
 
     /// Shuffle cards
     pub fn shuffle(&mut self) {
-        shuffle_array(&mut self.cards)
+        shuffle_array(&mut self.cards);
     }
 
     /// Draw from deck
+    ///
+    /// # Errors
+    ///
+    /// Returns `BJError::DeckEmpty` if the deck has no cards remaining.
     pub fn draw(&mut self) -> Result<Card, BJError> {
         self.cards.pop().ok_or(BJError::DeckEmpty)
     }
@@ -107,13 +112,12 @@ pub struct Card {
 /// Card implementation
 impl Card {
     /// Get Card numeric value
-    pub fn val(&self) -> u8 {
+    #[must_use] 
+    pub const fn val(&self) -> u8 {
         match self.value {
             Value::Ace => 11,
             Value::Number(num) => num,
-            Value::Jack => 10,
-            Value::Queen => 10,
-            Value::King => 10,
+            Value::Jack | Value::Queen | Value::King => 10,
         }
     }
 }
@@ -175,7 +179,7 @@ impl fmt::Display for Card {
             (Value::King, Suit::Hearts) => write!(f, "🂾"),
             (Value::King, Suit::Spades) => write!(f, "🂮"),
             (Value::Number(n), _) => panic!(
-                "Display not implemented for card. Number {} is likely not a valid numeric value for card", n
+                "Display not implemented for card. Number {n} is likely not a valid numeric value for card"
             ),
         }
     }
