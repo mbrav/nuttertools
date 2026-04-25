@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use clap::{arg, Args};
+use clap::Args;
 
 use crate::blackjacked::cards::{Card, Deck};
 use crate::blackjacked::error::BJError;

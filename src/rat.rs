@@ -1,4 +1,4 @@
-use clap::{arg, ArgAction, Args};
+use clap::{ArgAction, Args};
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};

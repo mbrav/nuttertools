@@ -1,4 +1,4 @@
-use clap::{arg, ArgAction, Args};
+use clap::{ArgAction, Args};
 
 use crate::Error;
 

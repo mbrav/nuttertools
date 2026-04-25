@@ -1,4 +1,4 @@
-use clap::{arg, Args};
+use clap::Args;
 use sha1::{Digest, Sha1};
 use std::{
     error::Error,
@@ -36,7 +36,9 @@ pub fn main(opts: &Options) -> Result<(), Box<dyn Error>> {
         let line = line?;
         let password = line.trim();
 
-        if opts.hash == format!("{:x}", Sha1::digest(password.as_bytes())) {
+        let digest = Sha1::digest(password.as_bytes());
+        let hash_str: String = digest.iter().map(|b| format!("{:02x}", b)).collect();
+        if opts.hash == hash_str {
             println!("Password found: {password}");
             println!("Line Number: {}", l + 1);
             return Ok(());

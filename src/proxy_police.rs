@@ -5,7 +5,7 @@ use std::thread;
 
 use crate::Error;
 
-use clap::{arg, Args};
+use clap::Args;
 
 const BUFFER_SIZE: usize = 1024;
 

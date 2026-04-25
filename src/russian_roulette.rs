@@ -1,4 +1,4 @@
-use clap::{arg, Args};
+use clap::Args;
 
 use crate::Error;
 
@@ -6,7 +6,7 @@ fn c_rand_u8() -> u8 {
     unsafe { rand() }
 }
 
-extern "C" {
+unsafe extern "C" {
     fn rand() -> u8;
 }
 

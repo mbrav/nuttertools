@@ -1,7 +1,7 @@
-use clap::{arg, Args};
+use clap::Args;
 use std::collections::VecDeque;
 use std::fs::File;
-use std::io::{self, BufWriter, Write};
+use std::io::{BufWriter, Write};
 use std::mem::size_of_val;
 
 use crate::Error;
@@ -36,8 +36,8 @@ pub fn main(opts: &Options) -> Result<(), Error> {
     println!("Prefix: {}", opts.prefix);
     println!("Output to: {}", opts.file);
 
-    let gen = Options::new(&opts.country_code, &opts.prefix, &opts.file);
-    gen.generate();
+    let generator = Options::new(&opts.country_code, &opts.prefix, &opts.file);
+    generator.generate();
     Ok(())
 }
 
@@ -73,13 +73,13 @@ impl Options {
         buffer.reserve(buffer_size);
 
         // Create a matrix of all numbers times number of combinations
-        let mut v: Vec<Vec<i32>> = vec![numbers.to_vec(); self.combinations.unwrap()];
+        let v: Vec<Vec<i32>> = vec![numbers.to_vec(); self.combinations.unwrap()];
 
         let mut indices = vec![0; v.len()];
         let mut done = false;
 
         while !done {
-            let r = self.prefix.clone() + &v.iter().map(|&i| i.to_string()).collect::<String>();
+            let r = self.prefix.clone() + &(0..v.len()).map(|i| v[i][indices[i]].to_string()).collect::<String>();
 
             buffer.push_back(r);
 
@@ -109,12 +109,12 @@ fn open_file(path: &String) -> File {
     File::create(path).expect("Unable to create file")
 }
 
-fn write_string_array(array: &VecDeque<String>, mut file: &File) {
+fn write_string_array(array: &VecDeque<String>, file: &File) {
     // Create a buffered writer for improved I/O performance
     let mut writer = BufWriter::new(file);
 
     // Join the strings and write to the file
-    let buffer = array.join("\n");
+    let buffer = array.iter().map(String::as_str).collect::<Vec<_>>().join("\n");
     println!("Buffer size: {} KB", size_of_val(&*buffer) / 1024);
 
     writer
