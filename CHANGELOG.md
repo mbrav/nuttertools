@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2024-01-01
+
+### Added
+
+- Added `blackjacked` subcommand — a pocket BlackJack game
+- Added `hits-of-code` metric inspired by @yegor256
+
+### Changed
+
+- Bumped Rust edition to 2024
+- Fixed all `cargo clippy -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used` warnings
+
 ## [0.0.4] - 2023-04-04
 
 ### Added
@@ -23,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added changelog
 
+[0.0.5]: https://github.com/mbrav/nuttertools/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/mbrav/nuttertools/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/mbrav/nuttertools/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/mbrav/nuttertools/releases/tag/0.0.2
